@@ -19,13 +19,15 @@
         <div class="el-upload__tip">
           注意:
           <br />
-          1. 文件需要小于500KB, 仅支持 Excel 格式;
+          1. 文件需要小于500KB, 仅支持 Excel 格式
           <br />
-          2. 请确保文件中包含以下列: Sample_ID, index, index2 (如有);
+          2. 请确保文件中包含以下列: Sample_ID, index, index2 (如有)
           <br />
-          3. Sample_ID 必须唯一, 不包含特殊字符;
+          3. Sample_ID 必须唯一, 不包含特殊字符
           <br />
-          4. index+index2, 必须唯一. 若仅有 index, 则 index 必须唯一;
+          4. index+index2, 必须唯一. 若仅有 index, 则 index 必须唯一
+          <br />
+          5. <u>不可更改模板中的列名</u>
         </div>
       </template>
     </el-upload>
@@ -102,6 +104,7 @@ const downloadTemplate = () => {
   gap: 10px;
   margin-bottom: 20px;
 }
+
 .button-group .el-button {
   width: auto;
   align-self: flex-start;
