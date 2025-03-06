@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref } from 'vue';
 import { ElMessage, ElMessageBox } from "element-plus";
 import type { UploadProps, UploadUserFile } from "element-plus";
 import axios from "axios"; // 导入axios库
@@ -60,7 +60,6 @@ const beforeRemove: UploadProps["beforeRemove"] = (uploadFile) => {
     () => false
   );
 };
-
 // 添加文件变化处理函数
 const handleFileChange = (file: UploadUserFile) => {
   // 这里可以添加文件验证逻辑
@@ -87,11 +86,10 @@ const handleFileChange = (file: UploadUserFile) => {
       console.error("文件上传失败:", error);
     });
 };
-
 // 下载模板
 const downloadTemplate = () => {
   const link = document.createElement("a");
-  link.href = "/templates/samplesheet-template.xlsx"; // 模板文件路径
+  link.href = "/api/template/samplesheet-template.xlsx"; // 模板文件路径
   link.download = "samplesheet-template.xlsx";
   link.click();
 };
