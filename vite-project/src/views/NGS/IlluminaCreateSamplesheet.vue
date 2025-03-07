@@ -1,7 +1,9 @@
 <template>
   <h2>Illumina samplesheet</h2>
   <div class="button-group">
-    <el-button type="success" @click="downloadTemplate">下载模板</el-button>
+    <el-button type="default" @click="downloadTemplate">下载模板</el-button>
+
+    <!-- 上传文件 -->
     <el-upload
       v-model:file-list="fileList"
       class="upload-demo"
@@ -31,11 +33,20 @@
         </div>
       </template>
     </el-upload>
+
+    <!-- 下载生成的 samplesheet -->
+    <el-button
+      v-if="downloadInfo.show"
+      type="success"
+      @click="downloadGeneratedFile"
+    >
+      结果下载
+    </el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import type { UploadProps, UploadUserFile } from "element-plus";
 import axios from "axios"; // 导入axios库
@@ -83,16 +94,39 @@ const handleFileChange = (file: UploadUserFile) => {
     })
     .then((response) => {
       console.log("文件上传成功:", response.data);
+      // 更新下载信息
+      downloadInfo.value = {
+        show: true,
+        filename: response.data.filename,
+        taskId: response.data.task_id,
+      };
+      ElMessage.success("samplesheet 生成成功");
     })
     .catch((error) => {
       console.error("文件上传失败:", error);
+      ElMessage.error(`samplesheet 生成失败, ${error.response.data.detail}`);
     });
 };
+
 // 下载模板
 const downloadTemplate = () => {
   const link = document.createElement("a");
   link.href = "/api/template/samplesheet-template.xlsx"; // 模板文件路径
   link.download = "samplesheet-template.xlsx";
+  link.click();
+};
+
+// 添加下载文件的状态管理
+const downloadInfo = ref({
+  show: false,
+  filename: "",
+  taskId: "",
+});
+// 添加下载生成文件的方法
+const downloadGeneratedFile = () => {
+  const link = document.createElement("a");
+  link.href = `/api/ngs/samplesheet/${downloadInfo.value.taskId}/${downloadInfo.value.filename}`;
+  link.download = downloadInfo.value.filename;
   link.click();
 };
 </script>

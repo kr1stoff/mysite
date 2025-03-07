@@ -9,9 +9,9 @@ const routes: Array<RouteRecordRaw> = [
   },
   // 可以继续添加更多路由
   {
-    path: "/NGS/samplesheet",
+    path: "/ngs/samplesheet",
     name: "IlluminaCreateSamplesheet",
-    component: () => import("@/views/NGS/IlluminaCreateSamplesheet.vue"),
+    component: () => import("@/views/ngs/IlluminaCreateSamplesheet.vue"),
   },
 ];
 

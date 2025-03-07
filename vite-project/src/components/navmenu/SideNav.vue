@@ -24,16 +24,16 @@
         <el-icon><HomeFilled /></el-icon>
         <template #title>主页</template>
       </el-menu-item>
-      <el-sub-menu index="/NGS">
+      <el-sub-menu index="/ngs">
         <template #title>
           <el-icon><DataAnalysis /></el-icon>
           <span>NGS 流程自动化</span>
         </template>
-        <el-menu-item index="/NGS/samplesheet"
+        <el-menu-item index="/ngs/samplesheet"
           >Illumina - samlesheet</el-menu-item
         >
-        <el-menu-item index="/NGS/LVIS">慢病毒插入位点</el-menu-item>
-        <el-menu-item index="/NGS/TCRseq">TCR-seq</el-menu-item>
+        <el-menu-item index="/ngs/lvis">慢病毒插入位点</el-menu-item>
+        <el-menu-item index="/ngs/tcrseq">TCR-seq</el-menu-item>
       </el-sub-menu>
       <el-menu-item index="/settings">
         <el-icon><Setting /></el-icon>
