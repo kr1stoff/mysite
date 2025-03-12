@@ -1,5 +1,5 @@
-from .path import UPLOAD_PATH, RESULT_PATH
-from .database import DATABASE_URL
+from .config_path import UPLOAD_PATH, RESULT_PATH
+from .config_database import DATABASE_URL
 
 
 __all__ = [

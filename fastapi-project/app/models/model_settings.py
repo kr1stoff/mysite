@@ -28,3 +28,9 @@ class SettingsResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SettingsUpdate(BaseModel):
+    """创建 Pydantic 更新模型"""
+    arg_name: str
+    arg_value: str
