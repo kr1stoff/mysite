@@ -31,3 +31,6 @@
     mkdir -p /data/mengxf/mysite/result
     mkdir -p /data/mengxf/mysite/template
     ```
+
+4. MySQL 数据库
+    创建数据库 `mysite`, 然后使用 `prepare/build_mysql_database.sql` 创建表

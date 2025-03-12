@@ -13,6 +13,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "IlluminaCreateSamplesheet",
     component: () => import("@/views/ngs/IlluminaCreateSamplesheet.vue"),
   },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: () => import("@/views/Settings.vue"),
+  }
 ];
 
 const router = createRouter({

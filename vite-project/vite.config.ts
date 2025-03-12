@@ -4,7 +4,7 @@ import path from "path";
 
 // 配置不同环境的变量
 export default defineConfig(({ mode }) => {
-  // ! 项目目录中的 .env 文件配置
+  // * 项目目录中的 .env 文件配置
   const env = loadEnv(mode, process.cwd());
 
   return {
@@ -13,15 +13,17 @@ export default defineConfig(({ mode }) => {
       host: "0.0.0.0",
       port: 5173,
       proxy: {
-        "/api/ngs": {
+        // * 配置请求代理到 FastAPI
+        "^/api/(ngs|settings)": {
           target: env.VITE_API_HOST,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/ngs/, "/api/ngs"),
+          rewrite: (path) => path,  // 路径相同无需修改
         },
+        // * 配置请求代理到 NGINX
         "/api/template": {
           target: env.VITE_NGINX_HOST,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/template/, "/api/template"),
+          rewrite: (path) => path,
         },
       },
     },
@@ -34,6 +36,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     resolve: {
+      // 配置路径别名，将 @ 指向 src 目录
       alias: {
         "@": path.resolve(__dirname, "src"),
       },

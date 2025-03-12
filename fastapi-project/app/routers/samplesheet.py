@@ -4,11 +4,11 @@ from pathlib import Path
 from datetime import datetime
 import pandas as pd
 
-from custom import get_path
+from app.config import UPLOAD_PATH
 
 
 router = APIRouter()
-upldir = Path(get_path()["upload"])
+upldir = UPLOAD_PATH
 
 
 @router.post("/api/ngs/samplesheet")

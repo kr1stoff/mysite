@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import samplesheet
 
-app = FastAPI()
+from app.routers import samplesheet, settings
+
+myapp = FastAPI()
 
 
 # CORS 设置
-app.add_middleware(
+myapp.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Vite 默认端口
     allow_credentials=True,
@@ -16,9 +17,10 @@ app.add_middleware(
 
 
 # 路由
-app.include_router(samplesheet.router)
+myapp.include_router(samplesheet.router)
+myapp.include_router(settings.router)
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(myapp, host="0.0.0.0", port=8000, reload=True)
