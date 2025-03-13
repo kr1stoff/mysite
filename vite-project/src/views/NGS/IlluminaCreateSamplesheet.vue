@@ -1,7 +1,7 @@
 <template>
   <h2>Illumina samplesheet</h2>
   <div class="button-group">
-    <el-button type="default" @click="downloadTemplate">下载模板</el-button>
+    <el-button type="info" @click="downloadTemplate">下载模板</el-button>
 
     <!-- 上传文件 -->
     <el-upload
@@ -16,7 +16,7 @@
       :limit="1"
       :on-exceed="handleExceed"
     >
-      <el-button type="primary">点击上传</el-button>
+      <el-button type="default">点击上传</el-button>
       <template #tip>
         <div class="el-upload__tip">
           注意:
@@ -52,27 +52,26 @@ import type { UploadProps, UploadUserFile } from "element-plus";
 import axios from "axios"; // 导入axios库
 
 const fileList = ref<UploadUserFile[]>([]);
+
 const handleRemove: UploadProps["onRemove"] = (file, uploadFiles) => {
   console.log(file, uploadFiles);
 };
+
 const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
   console.log(uploadFile);
 };
-const handleExceed: UploadProps["onExceed"] = (files, uploadFiles) => {
-  ElMessage.warning(
-    `The limit is 1, you selected ${files.length} files this time, add up to ${
-      files.length + uploadFiles.length
-    } totally`
-  );
+
+const handleExceed: UploadProps["onExceed"] = () => {
+  ElMessage.warning(`提交文件上限为 1. 已超出限制, 请删除后再上传`);
 };
+
 const beforeRemove: UploadProps["beforeRemove"] = (uploadFile) => {
-  return ElMessageBox.confirm(
-    `Cancel the transfer of ${uploadFile.name} ?`
-  ).then(
+  return ElMessageBox.confirm(`取消上传 ${uploadFile.name} ?`).then(
     () => true,
     () => false
   );
 };
+
 // 添加文件变化处理函数
 const handleFileChange = (file: UploadUserFile) => {
   // 这里可以添加文件验证逻辑
@@ -123,31 +122,12 @@ const downloadInfo = ref({
   taskId: "",
 });
 
-// 修改下载生成文件的方法
+// 添加下载生成文件的方法
 const downloadGeneratedFile = async () => {
-  try {
-    const response = await axios.get(
-      `/api/ngs/samplesheet/${downloadInfo.value.taskId}/${downloadInfo.value.filename}`,
-      { responseType: 'blob' }  // 设置响应类型为 blob
-    );
-    // 创建 Blob URL
-    const blob = new Blob([response.data], {
-      type: response.headers['content-type']
-    });
-    const url = window.URL.createObjectURL(blob);
-    // 创建临时链接并触发下载
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = downloadInfo.value.filename;
-    document.body.appendChild(link);
-    link.click();
-    // 清理
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error('下载失败:', error);
-    ElMessage.error('文件下载失败');
-  }
+  const link = document.createElement("a");
+  link.href = `/api/results/samplesheet/${downloadInfo.value.taskId}/${downloadInfo.value.filename}`;
+  link.download = downloadInfo.value.filename;
+  link.click();
 };
 </script>
 

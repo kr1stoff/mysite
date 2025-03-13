@@ -47,24 +47,21 @@
         gzip_min_length 1k;
         gzip_types application/vnd.ms-excel;
 
-            root /data/mengxf/GitHub/Web/mysite/vite-project;
+        root /data/mengxf/GitHub/Web/mysite/vite-project;
         index index.html;
 
         location / {
             try_files $uri $uri/ /index.html;
         }
 
-        location /api/ {
-            proxy_pass http://10.255.24.60:8000;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+        location /api/templates/ {
+            alias /data/mengxf/mysite/templates/;
+            autoindex on;  # Optional: Enable directory listing if needed
         }
 
-        location /api/templates/ {
-            alias /data/mengxf/mysite/nginx/templates/;
-            autoindex on;  # Optional: Enable directory listing if needed
+        location /api/results/ {
+            alias /data/mengxf/mysite/results/;
+            autoindex on;
         }
     }
     ```

@@ -1,23 +1,25 @@
 from fastapi import APIRouter, File, UploadFile, HTTPException
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
 
-from app.config import UPLOAD_PATH
+from app.config import UPLOAD_PATH, RESULT_PATH
 
 
 router = APIRouter()
-upldir = UPLOAD_PATH
 
 
 @router.post("/api/ngs/samplesheet")
 async def create_samplesheet(file: UploadFile = File(...)):
     """上传文件"""
-    # 保存文件到指定目录
     crnt_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-    crnt_task_upldir = upldir / crnt_time
+    crnt_task_upldir = UPLOAD_PATH / "samplesheet" / crnt_time
     crnt_task_upldir.mkdir(parents=True, exist_ok=True)
+    crnt_task_resdir = RESULT_PATH / "samplesheet" / crnt_time
+    crnt_task_resdir.mkdir(parents=True, exist_ok=True)
+
+    # 保存文件到指定目录
     file_location = f"{crnt_task_upldir}/{file.filename}"
     contents = await file.read()
     with open(file_location, "wb") as buffer:
@@ -31,7 +33,7 @@ async def create_samplesheet(file: UploadFile = File(...)):
 
     # 处理文件
     out_smpsht_csv = f"{
-        crnt_task_upldir}/{Path(file_location).stem}-samplesheet.csv"
+        crnt_task_resdir}/{Path(file_location).stem}-samplesheet.csv"
     write_samplesheet(file_location, out_smpsht_csv)
 
     # * 返回 JSON 响应
@@ -40,20 +42,6 @@ async def create_samplesheet(file: UploadFile = File(...)):
         "task_id": crnt_time,
         "filename": Path(out_smpsht_csv).name
     })
-
-
-# 添加新的下载路由
-@router.get("/api/ngs/samplesheet/{task_id}/{filename}")
-async def download_samplesheet(task_id: str, filename: str):
-    """
-    下载文件
-    task_id: 任务ID
-    filename: 文件名
-    """
-    file_location = upldir / task_id / filename
-    if not file_location.exists():
-        raise HTTPException(status_code=404, detail="文件不存在")
-    return FileResponse(path=file_location, filename=filename, media_type="text/csv")
 
 
 def check_input(infile: str):

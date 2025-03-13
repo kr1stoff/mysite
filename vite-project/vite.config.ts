@@ -17,10 +17,10 @@ export default defineConfig(({ mode }) => {
         "^/api/(ngs|settings)": {
           target: env.VITE_API_HOST,
           changeOrigin: true,
-          rewrite: (path) => path,  // 路径相同无需修改
+          rewrite: (path) => path, // 路径相同无需修改
         },
         // * 配置请求代理到 NGINX
-        "/api/templates": {
+        "^/api/(templates|results)": {
           target: env.VITE_NGINX_HOST,
           changeOrigin: true,
           rewrite: (path) => path,

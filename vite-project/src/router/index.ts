@@ -14,9 +14,9 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/Settings.vue"),
   },
   {
-    path: "/tasks",
+    path: "/ngs/tasks",
     name: "Tasks",
-    component: () => import("@/views/Tasks.vue"),
+    component: () => import("@/views/ngs/Tasks.vue"),
   },
   // ngs
   {
@@ -25,9 +25,9 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/ngs/IlluminaCreateSamplesheet.vue"),
   },
   {
-    path: "/ngs/lvis",
-    name: "LVIS",
-    component: () => import("@/views/ngs/LVIS.vue"),
+    path: "/ngs/workflows",
+    name: "Workflows",
+    component: () => import("@/views/ngs/Workflows.vue"),
   },
 ];
 
