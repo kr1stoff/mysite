@@ -2,7 +2,7 @@
 
 ## 部署
 
-1. vite
+1. Vite
 
     ```bash
     cnpm install
@@ -10,7 +10,7 @@
     npm run dev
     ```
 
-2. fastapi
+2. FastAPI
     启动
 
     ```bash
@@ -24,13 +24,58 @@
     mamba install -c conda-forge fastapi uvicorn python-multipart
     ```
 
-3. 创建网站相关目录
+3. NGINX
+    配置文件 `/etc/nginx/sites-available/vite-app.conf`, 然后 `sudo nginx -s reload` 重启 NGINX
 
-    ```bash
-    mkdir -p /data/mengxf/mysite/upload
-    mkdir -p /data/mengxf/mysite/result
-    mkdir -p /data/mengxf/mysite/template
+    ```conf
+    server {
+        listen 80;
+        server_name 10.255.24.60;
+
+        proxy_read_timeout 120s;
+        proxy_send_timeout 120s;
+        send_timeout 120s;
+        proxy_buffer_size 128k;
+        proxy_buffers 4 128k;
+        proxy_busy_buffers_size 256k;
+        client_body_buffer_size 128k;
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        proxy_buffering off;
+        gzip on;
+        gzip_min_length 1k;
+        gzip_types application/vnd.ms-excel;
+
+            root /data/mengxf/GitHub/Web/mysite/vite-project;
+        index index.html;
+
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+
+        location /api/ {
+            proxy_pass http://10.255.24.60:8000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /api/templates/ {
+            alias /data/mengxf/mysite/nginx/templates/;
+            autoindex on;  # Optional: Enable directory listing if needed
+        }
+    }
     ```
 
-4. MySQL 数据库
+4. 创建网站相关目录
+
+    ```bash
+    mkdir -p /data/mengxf/mysite/uploads
+    mkdir -p /data/mengxf/mysite/results
+    mkdir -p /data/mengxf/mysite/nginx/templates
+    ```
+
+5. MySQL 数据库
     创建数据库 `mysite`, 然后使用 `prepare/build_mysql_database.sql` 创建表

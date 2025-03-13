@@ -111,7 +111,7 @@ const handleFileChange = (file: UploadUserFile) => {
 // 下载模板
 const downloadTemplate = () => {
   const link = document.createElement("a");
-  link.href = "/api/template/samplesheet-template.xlsx"; // 模板文件路径
+  link.href = "/api/templates/samplesheet-template.xlsx"; // 模板文件路径
   link.download = "samplesheet-template.xlsx";
   link.click();
 };
@@ -122,12 +122,32 @@ const downloadInfo = ref({
   filename: "",
   taskId: "",
 });
-// 添加下载生成文件的方法
-const downloadGeneratedFile = () => {
-  const link = document.createElement("a");
-  link.href = `/api/ngs/samplesheet/${downloadInfo.value.taskId}/${downloadInfo.value.filename}`;
-  link.download = downloadInfo.value.filename;
-  link.click();
+
+// 修改下载生成文件的方法
+const downloadGeneratedFile = async () => {
+  try {
+    const response = await axios.get(
+      `/api/ngs/samplesheet/${downloadInfo.value.taskId}/${downloadInfo.value.filename}`,
+      { responseType: 'blob' }  // 设置响应类型为 blob
+    );
+    // 创建 Blob URL
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type']
+    });
+    const url = window.URL.createObjectURL(blob);
+    // 创建临时链接并触发下载
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = downloadInfo.value.filename;
+    document.body.appendChild(link);
+    link.click();
+    // 清理
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('下载失败:', error);
+    ElMessage.error('文件下载失败');
+  }
 };
 </script>
 

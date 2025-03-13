@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path,  // 路径相同无需修改
         },
         // * 配置请求代理到 NGINX
-        "/api/template": {
+        "/api/templates": {
           target: env.VITE_NGINX_HOST,
           changeOrigin: true,
           rewrite: (path) => path,

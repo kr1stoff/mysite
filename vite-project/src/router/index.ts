@@ -9,15 +9,26 @@ const routes: Array<RouteRecordRaw> = [
   },
   // 可以继续添加更多路由
   {
+    path: "/settings",
+    name: "Settings",
+    component: () => import("@/views/Settings.vue"),
+  },
+  {
+    path: "/tasks",
+    name: "Tasks",
+    component: () => import("@/views/Tasks.vue"),
+  },
+  // ngs
+  {
     path: "/ngs/samplesheet",
     name: "IlluminaCreateSamplesheet",
     component: () => import("@/views/ngs/IlluminaCreateSamplesheet.vue"),
   },
   {
-    path: "/settings",
-    name: "Settings",
-    component: () => import("@/views/Settings.vue"),
-  }
+    path: "/ngs/lvis",
+    name: "LVIS",
+    component: () => import("@/views/ngs/LVIS.vue"),
+  },
 ];
 
 const router = createRouter({

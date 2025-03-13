@@ -7,11 +7,12 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
+      router
       @select="handleSelect"
       style="display: flex; justify-content: space-between"
     >
-      <el-menu-item index="1">金墁利-中心实验室</el-menu-item>
-      <el-menu-item index="2">
+      <el-menu-item index="/">金墁利-中心实验室</el-menu-item>
+      <el-menu-item>
         <el-avatar :src="circleUrl" />
       </el-menu-item>
     </el-menu>
