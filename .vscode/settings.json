@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "10.255.24.60",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "10.255.24.60",
+            "database": "mysite",
+            "username": "mengxf",
+            "password": "123456",
+            "connectionTimeout": 15
+        }
+    ]
+}

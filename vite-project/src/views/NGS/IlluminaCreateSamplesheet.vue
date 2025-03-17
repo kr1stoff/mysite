@@ -104,6 +104,7 @@ const handleFileChange = (file: UploadUserFile) => {
     .catch((error) => {
       console.error("文件上传失败:", error);
       ElMessage.error(`samplesheet 生成失败, ${error.response.data.detail}`);
+      fileList.value = [];
     });
 };
 

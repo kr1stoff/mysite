@@ -10,7 +10,7 @@
     status-icon
   >
     <el-form-item label="芯片号" prop="chipNumber">
-      <el-input v-model="ruleForm.chipNumber" />
+      <el-input v-model="ruleForm.chipNumber" placeholder="ChipNumber" />
     </el-form-item>
     <el-form-item label="工作流" prop="workflow">
       <el-select v-model="ruleForm.workflow" filterable placeholder="Workflow">
@@ -56,6 +56,7 @@ import type {
   UploadUserFile,
 } from "element-plus";
 import { ElMessage, ElMessageBox } from "element-plus";
+import axios from "axios";
 
 const fileList = ref<UploadUserFile[]>([]);
 
@@ -80,15 +81,15 @@ const beforeRemove: UploadProps["beforeRemove"] = (uploadFile) => {
 
 // 表单校验
 interface RuleForm {
-  workflow: string;
   chipNumber: string;
+  workflow: string;
 }
 
 const formSize = ref<ComponentSize>("default");
 const ruleFormRef = ref<FormInstance>();
 const ruleForm = reactive<RuleForm>({
-  workflow: "慢病毒插入位点",
-  chipNumber: "AHKM52BGXW",
+  chipNumber: "",
+  workflow: "",
 });
 
 const rules = reactive<FormRules<RuleForm>>({
@@ -99,13 +100,15 @@ const rules = reactive<FormRules<RuleForm>>({
   ],
 });
 
+// 提交表单
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  await formEl.validate((valid, fields) => {
+  await formEl.validate((valid) => {
     if (valid) {
-      if (fileList.value,length === 0) {
-        ElMessage.error("请上传 samplesheet 文件")
-        return
+      if ((fileList.value.length === 0)) {
+        ElMessage.error("请上传 samplesheet 文件");
+        console.log("请上传 samplesheet 文件");
+        return;
       }
       try {
         const formData = new FormData();
@@ -113,18 +116,38 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         formData.append("chipNumber", ruleForm.chipNumber);
         formData.append("workflow", ruleForm.workflow);
         // 添加文件
-        formData.append("samplesheet", fileList.value[0].raw, fileList.value[0].name);
+        formData.append(
+          "samplesheet",
+          fileList.value[0].raw as Blob,
+          fileList.value[0].name
+        );
+        // 发送请求
+        axios
+          .post("/api/ngs/workflow", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            console.log("提交成功:", response.data);
+            ElMessage.success("提交成功");
+          });
+      } catch (error) {
+        console.error("提交错误:", error);
+        ElMessage.error("提交失败，请重试");
       }
-      // console.log("提交成功!");
     } else {
-      console.log("错误提交!", fields);
+      ElMessage.error("提交失败，请重试");
     }
   });
 };
 
+// 重置表单
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
+  // 清空文件列表
+  fileList.value = [];
 };
 
 // 选择工作流

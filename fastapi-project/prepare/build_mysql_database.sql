@@ -5,6 +5,18 @@ create table mysite.settings (
 	arg_name varchar(255),
 	arg_value varchar(255)
 );
-
-insert into mysite.settings (arg_name, arg_value)
-value ("illumina_bcl_directory", "/data/mengxf/mysite/test/illumina_bcldir");
+insert into mysite.settings (arg_name, arg_value) value (
+		"illumina_bcl_directory",
+		"/data/mengxf/mysite/test/illumina_bcldir"
+	);
+-- 创建任务列表
+create table mysite.tasks (
+	id int auto_increment primary key,
+	task_number varchar(255),
+	workflow varchar(255),
+	created_at datetime,
+	completed_at datetime,
+	bcl_status int,
+	fastq_status int,
+	analysis_status int
+);
