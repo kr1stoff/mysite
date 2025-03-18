@@ -131,10 +131,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           .then((response) => {
             console.log("提交成功:", response.data);
             ElMessage.success("提交成功");
+            // 重置表单和文件列表
+            resetForm(formEl);
           });
       } catch (error) {
         console.error("提交错误:", error);
-        ElMessage.error("提交失败，请重试");
+        ElMessage.error((error as any).response?.data?.detail || "提交失败，请重试")
       }
     } else {
       ElMessage.error("提交失败，请重试");

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import router_samplesheet, router_settings
+from app.routers import router_samplesheet, router_settings, router_workflow
 
 myapp = FastAPI()
 
@@ -19,6 +19,7 @@ myapp.add_middleware(
 # 路由
 myapp.include_router(router_samplesheet.router)
 myapp.include_router(router_settings.router)
+myapp.include_router(router_workflow.router)
 
 
 if __name__ == "__main__":

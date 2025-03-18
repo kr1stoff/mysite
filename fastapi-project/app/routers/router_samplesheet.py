@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime
 import pandas as pd
 
-from app.config import UPLOAD_PATH, RESULT_PATH
+from app.config.config_path import UPLOAD_PATH, RESULT_PATH
 
 
 router = APIRouter()

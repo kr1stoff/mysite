@@ -24,13 +24,13 @@
           <el-icon><DataAnalysis /></el-icon>
           <span>NGS 流程自动化</span>
         </template>
-        <el-menu-item index="/ngs/tasks"
-          ><template #title>任务列表</template></el-menu-item
-        >
         <el-menu-item index="/ngs/samplesheet"
           >Illumina - samlesheet</el-menu-item
         >
         <el-menu-item index="/ngs/workflows">工作流</el-menu-item>
+        <el-menu-item index="/ngs/tasks"
+          ><template #title>任务列表</template></el-menu-item
+        >
       </el-sub-menu>
       <el-menu-item index="/settings">
         <el-icon><Setting /></el-icon>

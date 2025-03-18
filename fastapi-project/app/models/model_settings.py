@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 
 # 配置账号、密码、数据库名
-from app.config import DATABASE_URL
+from app.config.config_database import DATABASE_URL
 
 
 engine = create_engine(DATABASE_URL)
