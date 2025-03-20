@@ -80,16 +80,19 @@ watch(isCollapse, (newValue) => {
 </script>
 
 <style scoped>
-.side-menu {
-  height: calc(100vh - 60px); /* 调整高度，留出底部空间 */
-  border-right: none;
-}
-
+/* 容器相关样式 */
 .side-nav-container {
   position: relative;
-  height: 100vh;
+  height: calc(100vh - 60px);  /* 减去底部边距 */
+  margin-bottom: 10px;  /* 添加底部边距 */
+  width: auto;
   background-color: #545c64;
   padding: 0;
+  z-index: 999;
+  overflow: visible;
+  transform: translateZ(0);
+  display: flex;
+  flex-direction: column;
 }
 
 :deep(.el-card__body) {
@@ -97,24 +100,54 @@ watch(isCollapse, (newValue) => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 
+/* 菜单相关样式 */
+.side-menu {
+  height: calc(100vh - 80px);  /* 调整高度，为底部按钮和边距留出空间 */
+  border-right: none;
+  z-index: 1;
+}
+
+:deep(.el-menu) {
+  border-right: none;
+  transform-origin: 0 0;
+  transform: translateZ(0);
+}
+
+:deep(.el-sub-menu .el-sub-menu__title) {
+  z-index: 2;
+}
+
+:deep(.el-menu--popup) {
+  z-index: 3000;
+  position: fixed;
+  transform: translateZ(0);
+  min-width: 200px;
+}
+
+/* 折叠控制按钮样式 */
 .collapse-control {
-  position: fixed; /* 改为固定定位 */
-  bottom: 10px;
-  left: 20px;
-  z-index: 100; /* 提高层级 */
+  position: relative;  /* 改为相对定位 */
+  margin-top: auto;   /* 自动占据顶部空间，实现底部对齐 */
+  margin-bottom: 10px;  /* 底部间距 */
+  width: 100%;        /* 宽度100% */
   height: 40px;
   display: flex;
+  justify-content: center;  /* 水平居中 */
   align-items: center;
-  background-color: #545c64; /* 确保背景色一致 */
+  background-color: #545c64;
+  z-index: 3001;
 }
 
 :deep(.el-radio-button__inner) {
   background-color: transparent;
-  /* border: none; */
   color: #fff;
-  padding: 8px 12px; /* 增加按钮可点击区域 */
+  padding: 8px 12px;
+  z-index: 3001;
+  white-space: nowrap;
+  border: none;  /* 移除边框 */
 }
 
 :deep(.el-radio-button__inner:hover) {

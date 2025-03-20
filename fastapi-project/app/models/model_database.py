@@ -7,7 +7,15 @@ from app.config.config_database import DATABASE_URL
 # 创建 SQLAlchemy Base 类
 Base = declarative_base()
 
-engine = create_async_engine(DATABASE_URL, future=True, echo=True)
+engine = create_async_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,           # 连接前检查
+    pool_recycle=3600,           # 一小时后回收连接
+    max_overflow=10,             # 允许的最大连接数
+    pool_timeout=30,             # 连接超时时间
+    echo=True
+)
+
 async_session = sessionmaker(
     bind=engine, class_=AsyncSession, expire_on_commit=False)
 

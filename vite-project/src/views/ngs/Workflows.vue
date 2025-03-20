@@ -105,39 +105,38 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid) => {
     if (valid) {
-      if ((fileList.value.length === 0)) {
+      if (fileList.value.length === 0) {
         ElMessage.error("请上传 samplesheet 文件");
         console.log("请上传 samplesheet 文件");
         return;
       }
-      try {
-        const formData = new FormData();
-        // 添加表单数据
-        formData.append("chipNumber", ruleForm.chipNumber);
-        formData.append("workflow", ruleForm.workflow);
-        // 添加文件
-        formData.append(
-          "samplesheet",
-          fileList.value[0].raw as Blob,
-          fileList.value[0].name
-        );
-        // 发送请求
-        axios
-          .post("/api/ngs/workflow", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((response) => {
-            console.log("提交成功:", response.data);
-            ElMessage.success("提交成功");
-            // 重置表单和文件列表
-            resetForm(formEl);
-          });
-      } catch (error) {
-        console.error("提交错误:", error);
-        ElMessage.error((error as any).response?.data?.detail || "提交失败，请重试")
-      }
+      const formData = new FormData();
+      // 添加表单数据
+      formData.append("chipNumber", ruleForm.chipNumber);
+      formData.append("workflow", ruleForm.workflow);
+      // 添加文件
+      formData.append(
+        "samplesheet",
+        fileList.value[0].raw as Blob,
+        fileList.value[0].name
+      );
+      // 发送请求
+      axios
+        .post("/api/ngs/workflow", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          console.log("提交成功:", response.data);
+          ElMessage.success("提交成功");
+          // 重置表单和文件列表
+          resetForm(formEl);
+        })
+        .catch((error) => {
+          console.error("提交失败:", error);
+          ElMessage.error(error.response?.data?.detail || "提交失败，请重试");
+        });
     } else {
       ElMessage.error("提交失败，请重试");
     }

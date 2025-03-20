@@ -1,5 +1,4 @@
 <template>
-  <h2>Illumina samplesheet</h2>
   <div class="button-group">
     <el-button type="info" @click="downloadTemplate">下载模板</el-button>
 
