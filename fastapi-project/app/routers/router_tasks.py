@@ -33,3 +33,40 @@ async def get_tasks(session: AsyncSession = Depends(model_database.get_session))
         return tasks
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"获取任务列表失败: {str(e)}")
+
+
+@router.put("/api/ngs/tasks/{mid}", response_model=TasksResponse)
+async def update_task(mid: int, session: AsyncSession = Depends(model_database.get_session)):
+    try:
+        # 查询任务
+        stmt = select(Tasks).where(Tasks.id == mid)
+        result = await session.execute(stmt)
+        db_task = result.scalar_one_or_none()
+        if not db_task:
+            raise HTTPException(status_code=404, detail="任务不存在")
+        # 更改 bcl, fastq, analysis 状态为 0
+        db_task.bcl_status = 0
+        db_task.fastq_status = 0
+        db_task.analysis_status = 0
+        await session.commit()
+        await session.refresh(db_task)
+        return db_task
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"更新任务失败: {str(e)}")
+
+
+@router.delete("/api/ngs/tasks/{mid}", response_model=TasksResponse)
+async def delete_task(mid: int, session: AsyncSession = Depends(model_database.get_session)):
+    try:
+        # 查询任务
+        stmt = select(Tasks).where(Tasks.id == mid)
+        result = await session.execute(stmt)
+        db_task = result.scalar_one_or_none()
+        if not db_task:
+            raise HTTPException(status_code=404, detail="任务不存在")
+        # 删除任务
+        await session.delete(db_task)
+        await session.commit()
+        return db_task
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"删除任务失败: {str(e)}")

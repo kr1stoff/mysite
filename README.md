@@ -69,7 +69,6 @@
 4. 创建网站相关目录
 
     ```bash
-    mkdir -p /data/mengxf/mysite/uploads
     mkdir -p /data/mengxf/mysite/results
     mkdir -p /data/mengxf/mysite/nginx/templates
     ```

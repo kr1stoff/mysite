@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime
 import pandas as pd
 
-from app.config.config_path import UPLOAD_PATH, RESULT_PATH
+from app.config.config_path import RESULT_PATH
 
 
 router = APIRouter()
@@ -14,13 +14,11 @@ router = APIRouter()
 async def create_samplesheet(file: UploadFile = File(...)):
     """上传文件"""
     crnt_time = datetime.now().strftime("%Y%m%d-%H%M%S")
-    crnt_task_upldir = UPLOAD_PATH / "samplesheet" / crnt_time
-    crnt_task_upldir.mkdir(parents=True, exist_ok=True)
     crnt_task_resdir = RESULT_PATH / "samplesheet" / crnt_time
     crnt_task_resdir.mkdir(parents=True, exist_ok=True)
 
     # 保存文件到指定目录
-    file_location = f"{crnt_task_upldir}/{file.filename}"
+    file_location = f"{crnt_task_resdir}/{file.filename}"
     contents = await file.read()
     with open(file_location, "wb") as buffer:
         buffer.write(contents)
