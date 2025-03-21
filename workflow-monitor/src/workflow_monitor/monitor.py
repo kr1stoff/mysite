@@ -1,22 +1,7 @@
 import asyncio
-import pymysql
-from pathlib import Path
 
-
-async def get_db_connection():
-    return pymysql.connect(
-        host='localhost',
-        user='your_username',
-        password='your_password',
-        database='your_database',
-        charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor
-    )
-
-
-async def check_bcl_complete(task_number: str) -> bool:
-    bcl_dir = Path("path/to/bcl") / task_number
-    return (bcl_dir / "complete").exists()
+from src.models.mysql import get_db_connection
+from src.core.bcl import check_bcl_complete
 
 
 async def process_workflow():
@@ -28,8 +13,6 @@ async def process_workflow():
                 cursor.execute("""
                     SELECT * FROM tasks
                     WHERE bcl_status = 0
-                    AND fastq_status = 0
-                    AND analysis_status = 0
                 """)
                 tasks = cursor.fetchall()
 
@@ -49,6 +32,7 @@ async def process_workflow():
         except Exception as e:
             print(f"发生错误: {e}")
 
+        # ! 每5分钟检查一次
         await asyncio.sleep(300)
 
 if __name__ == "__main__":
