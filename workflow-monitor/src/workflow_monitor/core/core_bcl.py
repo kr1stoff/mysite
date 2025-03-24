@@ -1,10 +1,10 @@
-from pathlib import Path
 import logging
+from pathlib import Path
 import asyncio
 
 from workflow_monitor.models.model_mysql_tasks import get_latest_bcl_task, update_task_status
 from workflow_monitor.models.model_mysql_settings import get_illumina_bcl_dir
-from workflow_monitor.config.config_time import SLEEP_TIME
+from workflow_monitor.config.config import SLEEP_TIME
 
 
 async def bcl():

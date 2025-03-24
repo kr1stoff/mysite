@@ -23,6 +23,28 @@ async def get_latest_bcl_task() -> Optional[Dict]:
         conn.close()
 
 
+async def get_lastest_fastq_task() -> Optional[Dict]:
+    """
+    获取最近的 FASTQ 任务信息, 后续都是分析流程
+    需要 bcl_status = 2, 也就是测序完成
+    fastq_status: 0-未开始, 1-正在生成, 2-生成完成, 3-生成异常
+    :return: 任务信息字典, 或 None
+    """
+    conn = await get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT * FROM tasks
+                WHERE fastq_status = 0
+                AND bcl_status = 2
+                ORDER BY id DESC
+                LIMIT 1
+            """)
+            return cursor.fetchone()
+    finally:
+        conn.close()
+
+
 async def update_task_status(task_id: int, column: str, status: int):
     """
     更新任务状态

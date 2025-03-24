@@ -1,5 +1,5 @@
 import pytest
-from workflow_monitor.models.model_mysql_settings import get_illumina_bcl_dir
+from src.workflow_monitor.models.model_mysql_settings import get_illumina_bcl_dir
 
 
 @pytest.mark.asyncio

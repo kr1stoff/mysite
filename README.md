@@ -75,3 +75,9 @@
 
 5. MySQL 数据库
     创建数据库 `mysite`, 然后使用 `prepare/build_mysql_database.sql` 创建表
+
+6. 轮询任务
+
+    ```bash
+    poetry run python -m workflow_monitor
+    ```
