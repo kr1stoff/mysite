@@ -3,8 +3,12 @@ from typing import Dict, Optional
 from workflow_monitor.models.model_mysql import get_db_connection
 
 
-async def get_latest_task() -> Optional[Dict]:
-    """获取最近的一个未启动的任务"""
+async def get_latest_bcl_task() -> Optional[Dict]:
+    """
+    获取最近的 BCL 任务信息, 这一步与脚本运行无关, 只是单纯监测BCL生成状态
+    bcl_status: 0-未开始, 1-正在生成, 2-生成完成
+    :return: 任务信息字典, 或 None
+    """
     conn = await get_db_connection()
     try:
         with conn.cursor() as cursor:

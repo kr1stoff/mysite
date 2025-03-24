@@ -1,8 +1,10 @@
 from pathlib import Path
 import logging
+import asyncio
 
-from workflow_monitor.models.model_mysql_tasks import get_latest_task, update_task_status
+from workflow_monitor.models.model_mysql_tasks import get_latest_bcl_task, update_task_status
 from workflow_monitor.models.model_mysql_settings import get_illumina_bcl_dir
+from workflow_monitor.config.config_time import SLEEP_TIME
 
 
 async def bcl():
@@ -11,11 +13,13 @@ async def bcl():
     """
     logging.info("检查 BCL 生成状态")
 
-    task = await get_latest_task()
+    task = await get_latest_bcl_task()
     if not task:
-        logging.info("没有未完成的任务")
+        logging.info("没有未完成的 BCL 任务")
+        await asyncio.sleep(SLEEP_TIME)
+        return
 
-    logging.info(f"当前任务信息: {task}")
+    logging.info(f"当前 BCL 任务信息: {task}")
     tid = task["id"]
     chip_number = task["chip_number"]
 
