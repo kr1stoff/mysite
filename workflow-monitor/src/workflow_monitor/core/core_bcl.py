@@ -8,11 +8,7 @@ from workflow_monitor.config.config import SLEEP_TIME
 
 
 async def bcl():
-    """
-    检查 BCL 生成状态
-    """
-    logging.info("检查 BCL 生成状态")
-
+    """检查 BCL 生成状态"""
     task = await get_latest_bcl_task()
     if not task:
         logging.info("没有未完成的 BCL 任务")
